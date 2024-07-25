@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .resizeImage {
+        height: 300px;
+        width: 300px;
+      }
+      .hover {
+        background-color: brown;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <p id="text">Hello</p>
+      <button onclick="handleTextInput()">ButtonText</button>
+    </div>
+    <div>
+      <img
+        class="resizeImage"
+        id="image"
+        src="./pexels-pixabay-60597.jpg"
+        alt="flower"
+      />
+    </div>
+    <div>
+      <input placeholder="Click Here" id="textInput" />
+      <form id="myform">
+        <label for="name">Name:</label>
+        <input type="tex" id="name" name="name" />
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <div>
+      <label for="mySelect">Choose an option:</label>
+      <select id="mySelect">
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+        <option value="option3">Option 3</option>
+      </select>
+      <p id="selectedValue"></p>
+    </div>
+    <div>
+      <ul id="myList">
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+        <li>Item 4</li>
+      </ul>
+    </div>
+
+    <div id="parentContainer">
+      <!-- Dynamic children will be added here -->
+    </div>
+    <button id="addChild">Add Child</button>
+
+    <script src="./App.js"></script>
+  </body>
+</html>
