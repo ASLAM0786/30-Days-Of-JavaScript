@@ -134,5 +134,120 @@ function longestUniqueSubstring(s) {
 // Example usage
 const str = "abcabcaabc";
 const result = longestUniqueSubstring(str);
-console.log(result.longestSubstring); // Output: "abc"
-console.log(result.maxLength); // Output: 3
+// console.log(result.longestSubstring);
+// console.log(result.maxLength);
+
+function rotateArray(arr, k) {
+  const n = arr.length;
+  k = k % n;
+  if (n === 0 || k === 0) return arr;
+
+  //! Rotate the array
+  return arr.slice(-k).concat(arr.slice(0, -k));
+}
+const arr = [1, 2, 3, 4, 5, 6, 7];
+const k = 3;
+const rotatedArray = rotateArray(arr, k);
+// console.log(rotatedArray);
+
+function mergedTwoSortedArray(arr1, arr2) {
+  let arr = [];
+  let len1 = arr1.length;
+  let len2 = arr2.length;
+  let i = 0,
+    j = 0,
+    k = 0;
+  while (i < len1 && j < len2) {
+    if (arr1[i] < arr2[j]) {
+      arr[k++] = arr1[i++];
+    } else {
+      arr[k++] = arr2[j++];
+    }
+  }
+  while (i < len1) {
+    arr[k++] = arr1[i++];
+  }
+  while (j < len2) {
+    arr[k++] = arr2[j++];
+  }
+  return arr;
+}
+// console.log(mergedTwoSortedArray([1, 3, 4, 5, 6], [1, 2, 3, 4, 5, 14]));
+
+const dp = [];
+function dynamicFib(num) {
+  if (num == 0 || num == 1) return num;
+
+  // Use undefined to check if a value has not been computed
+  if (dp[num] !== undefined) return dp[num];
+
+  dp[num] = dynamicFib(num - 1) + dynamicFib(num - 2);
+  return dp[num];
+}
+
+// console.log(dynamicFib(5)); // Output: 5
+// console.log(dp); // Output: [0, 1, 1, 2, 3, 5]
+
+//?Revise it
+function knapsack(weights, values, capacity) {
+  // Number of items
+  const n = weights.length;
+
+  // Create a 2D array to store the maximum value that can be achieved with the given capacity
+  const dp = Array.from({ length: n + 1 }, () => Array(capacity + 1).fill(0));
+
+  // Build the dp array from the bottom up
+  for (let i = 1; i <= n; i++) {
+    for (let w = 1; w <= capacity; w++) {
+      // If the weight of the current item is less than or equal to the current capacity
+      if (weights[i - 1] <= w) {
+        // Take the maximum of including the item or not including it
+        dp[i][w] = Math.max(
+          dp[i - 1][w],
+          dp[i - 1][w - weights[i - 1]] + values[i - 1]
+        );
+      } else {
+        // If the item cannot be included, carry forward the value without including it
+        dp[i][w] = dp[i - 1][w];
+      }
+    }
+  }
+
+  // The maximum value that can be achieved with the given capacity
+  return dp[n][capacity];
+}
+
+// Example usage
+// const weights = [1, 2, 3, 8, 7, 4];
+// const values = [20, 5, 10, 40, 15, 25];
+// const capacity = 10;
+const weights = [10, 20, 30];
+const values = [60, 100, 120];
+const capacity = 50;
+
+const maxValue = knapsack(weights, values, capacity);
+console.log(`Maximum value in knapsack = ${maxValue}`);
+
+// function knapsack(weights, values, capacity) {
+//     const n = weights.length;
+//     const dp = Array.from({ length: n + 1 }, () => Array(capacity + 1).fill(0));
+
+//     for (let i = 1; i <= n; i++) {
+//         for (let w = 1; w <= capacity; w++) {
+//             if (weights[i - 1] <= w) {
+//                 dp[i][w] = Math.max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1]);
+//             } else {
+//                 dp[i][w] = dp[i - 1][w];
+//             }
+//         }
+//     }
+
+//     return dp[n][capacity];
+// }
+
+// const weights = [10, 20, 30];
+// const values = [60, 100, 120];
+// const capacity = 50;
+
+// const maxValue = knapsack(weights, values, capacity);
+// console.log(`Maximum value in knapsack = ${maxValue}`); // Output: 220
