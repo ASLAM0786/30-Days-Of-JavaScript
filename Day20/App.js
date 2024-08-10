@@ -42,3 +42,18 @@ savePreferences("dark", "18px");
 
 // Load preferences (e.g., on page load)
 loadPreferences();
+
+//*Session storage
+// Store a string value
+sessionStorage.setItem("key", "value");
+
+// Store an object (convert to JSON string first)
+const user1 = { name: "Alice", age: 25 };
+localStorage.setItem("user", JSON.stringify(user));
+
+// Retrieve a string value
+console.log(sessionStorage.getItem("key"));
+
+// Retrieve and parse an object
+const userString1 = sessionStorage.getItem("user");
+console.log(JSON.parse(userString));
