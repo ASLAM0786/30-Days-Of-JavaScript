@@ -75,56 +75,112 @@ fetch(url)
 //       });
 //   });
 
-document.addEventListener("DOMContentLoaded", function () {
-  //const apiKey = "YOUR_API_KEY"; // Replace with your actual API key
+// document.addEventListener("DOMContentLoaded", function () {
+//   document
+//     .getElementById("weather-form")
+//     .addEventListener("submit", function (event) {
+//       event.preventDefault(); // Prevent the default form submission
 
-  document
-    .getElementById("weather-form")
-    .addEventListener("submit", function (event) {
-      event.preventDefault(); // Prevent the default form submission
+//       const city = document.getElementById("city-name").value.trim();
+//       if (!city) {
+//         alert("Please enter a city name.");
+//         return;
+//       }
 
-      const city = document.getElementById("city-name").value.trim();
-      if (!city) {
-        alert("Please enter a city name.");
-        return;
-      }
+//       const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
 
+//       fetch(url)
+//         .then((response) => response.json())
+//         .then((data) => {
+//           if (data.cod === "200") {
+//             const forecastContainer = document.getElementById("forecast");
+//             forecastContainer.innerHTML = ""; // Clear any previous data
+
+//             // Filter forecast data to get one forecast per day
+//             const forecasts = data.list.filter((_, index) => index % 8 === 0); // One entry every 8 hours
+
+//             forecasts.forEach((forecast) => {
+//               const date = new Date(forecast.dt * 1000).toLocaleDateString();
+//               const temp = forecast.main.temp;
+//               const condition = forecast.weather[0].description;
+//               const icon = `http://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`;
+
+//               // Create and append forecast item
+//               const forecastItem = document.createElement("div");
+//               forecastItem.className = "forecast-item";
+//               forecastItem.innerHTML = `
+//                                     <h3>${date}</h3>
+//                                     <img src="${icon}" alt="${condition}" />
+//                                     <p>${temp.toFixed(1)}°C</p>
+//                                     <p>${condition}</p>
+//                                 `;
+//               forecastContainer.appendChild(forecastItem);
+//             });
+//           } else {
+//             document.getElementById("forecast").innerHTML =
+//               "City not found or data unavailable.";
+//           }
+//         })
+//         .catch((error) => {
+//           console.error("Error fetching weather data:", error);
+//         });
+//     });
+// });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const progressContainer = document.getElementById("progress-container");
+  const progressBar = document.getElementById("progress-bar");
+  const form = document.getElementById("weather-form");
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent the default form submission
+
+    const city = document.getElementById("city-name").value;
+    if (city) {
+      // Show progress bar
+      progressContainer.style.display = "block";
+      progressBar.style.width = "100%";
+
+      // Fetch weather data
       const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
 
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
-          if (data.cod === "200") {
-            const forecastContainer = document.getElementById("forecast");
-            forecastContainer.innerHTML = ""; // Clear any previous data
+          // Handle weather data here
+          // console.log("Weather Data:", data);
 
-            // Filter forecast data to get one forecast per day
-            const forecasts = data.list.filter((_, index) => index % 8 === 0); // One entry every 8 hours
+          // Hide progress bar
+          progressContainer.style.display = "none";
+          progressBar.style.width = "0";
 
-            forecasts.forEach((forecast) => {
-              const date = new Date(forecast.dt * 1000).toLocaleDateString();
-              const temp = forecast.main.temp;
-              const condition = forecast.weather[0].description;
-              const icon = `http://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`;
+          // Process and display weather data
+          const cityName = data.city.name;
+          const forecastItems = data.list.slice(0, 5); // Get the first 5 forecast items
 
-              // Create and append forecast item
-              const forecastItem = document.createElement("div");
-              forecastItem.className = "forecast-item";
-              forecastItem.innerHTML = `
-                                    <h3>${date}</h3>
-                                    <img src="${icon}" alt="${condition}" />
-                                    <p>${temp.toFixed(1)}°C</p>
-                                    <p>${condition}</p>
-                                `;
-              forecastContainer.appendChild(forecastItem);
-            });
-          } else {
-            document.getElementById("forecast").innerHTML =
-              "City not found or data unavailable.";
-          }
+          document.getElementById("city").textContent = `City: ${cityName}`;
+          document.getElementById("forecast").innerHTML = forecastItems
+            .map(
+              (item) => `
+            <div class="forecast-item">
+              <img src="http://openweathermap.org/img/wn/${
+                item.weather[0].icon
+              }.png" alt="${item.weather[0].description}">
+              <h3>${new Date(item.dt * 1000).toLocaleDateString()}</h3>
+              <p>Temp: ${item.main.temp.toFixed(1)}°C</p>
+              <p>Condition: ${item.weather[0].description}</p>
+            </div>
+          `
+            )
+            .join("");
         })
         .catch((error) => {
           console.error("Error fetching weather data:", error);
+
+          // Hide progress bar on error
+          progressContainer.style.display = "none";
+          progressBar.style.width = "0";
         });
-    });
+    }
+  });
 });

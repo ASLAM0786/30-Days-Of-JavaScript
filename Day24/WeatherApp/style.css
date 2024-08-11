@@ -22,9 +22,20 @@ header {
 
 h1 {
   font-size: 2.5em;
+  margin: 0; /* Remove default margin */
 }
 
-.weather-info {
+/* Container to center align .weather-info and .search-city */
+.center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.weather-info,
+.search-city {
   background-color: #ffffff; /* White background */
   padding: 20px;
   border-radius: 10px;
@@ -36,13 +47,10 @@ h1 {
   max-width: 800px;
 }
 
-.weather-info p {
+.weather-info p,
+.search-city p {
   font-size: 1.2em;
   margin: 10px 0;
-}
-
-.search-city {
-  margin: 20px 0;
 }
 
 #weather-form {
@@ -55,7 +63,7 @@ h1 {
   padding: 12px;
   margin-bottom: 10px;
   width: 100%;
-  max-width: 400px;
+  max-width: 400px; /* Ensure the input is not too wide */
   border: 2px solid #00bcd4; /* Cyan border */
   border-radius: 8px;
   font-size: 16px;
@@ -77,11 +85,15 @@ button:hover {
   transform: scale(1.05);
 }
 
+/* Forecast styling to take full width and align left */
 .forecast {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start; /* Align items to the left */
   gap: 20px;
+  width: 100%;
+  max-width: 1200px; /* Ensure it can grow but not exceed a reasonable width */
+  margin-top: 20px;
 }
 
 .forecast-item {
@@ -116,4 +128,204 @@ button:hover {
   margin: 5px 0;
   font-size: 16px;
   color: #555;
+}
+
+toshowa progress indicator while the forecast data is being fetched and render items, you can use a combination of CSS for styling and JavaScript for controlling the visibility of the progress bar. Here's how you can do it:
+
+HTML
+Add a progress bar element to your HTML:
+
+html
+Copy code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Details Website</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <h1>Weather Information</h1>
+    </header>
+    <div class="center-container">
+        <div class="weather-info">
+            <p id="city">City:</p>
+            <p id="temp">Temperature:</p>
+            <p id="condition">Condition:</p>
+        </div>
+        <div class="search-city">
+            <form id="weather-form">
+                <input type="text" name="city" placeholder="City" id="city-name" required />
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="forecast" id="forecast">
+        <!-- Forecast items will be added here -->
+    </div>
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+    <script src="App.js"></script>
+</body>
+</html>
+
+Copy And Save
+
+Share
+
+Ask Copilot
+
+CSS
+Style the progress bar and ensure it's hidden by default: css
+  Copy code body {
+  font-family: "Arial", sans-serif;
+  background-color: #f0f8ff; /* Light AliceBlue background */
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: 0; /* Ensure no default margin on body */
+}
+
+header {
+  background-color: #00bcd4; /* Cyan background */
+  color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin: 0; /* Remove default margin */
+}
+
+.center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+}
+
+.weather-info,
+.search-city {
+  background-color: #ffffff; /* White background */
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #00bcd4; /* Cyan border */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 800px;
+}
+
+.weather-info p,
+.search-city p {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
+#weather-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#city-name {
+  padding: 12px;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 400px; /* Ensure the input is not too wide */
+  border: 2px solid #00bcd4; /* Cyan border */
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+button {
+  padding: 12px 24px;
+  border: none;
+  background-color: #00bcd4; /* Cyan background */
+  color: #fff;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #0097a7; /* Darker cyan */
+  transform: scale(1.05);
+}
+
+.forecast {
+  display: flex;
+  flex-wrap: nowrap; /* Ensure all items stay in one row */
+  justify-content: flex-start; /* Align items to the left */
+  gap: 20px; /* Space between items */
+  width: 100%;
+  max-width: 1200px; /* Ensure it can grow but not exceed a reasonable width */
+  margin-top: 20px;
+  overflow-x: auto; /* Allow horizontal scrolling if needed */
+}
+
+.forecast-item {
+  border: 2px solid #00bcd4; /* Cyan border */
+  padding: 15px;
+  width: 200px; /* Adjust width as needed to fit items */
+  background-color: #ffffff; /* White background */
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.forecast-item:hover {
+  background-color: #e0f7fa; /* Light cyan background on hover */
+  transform: scale(1.02);
+}
+
+.forecast-item img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+.forecast-item h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #00796b; /* Darker cyan */
+}
+
+.forecast-item p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+/* Progress bar styling */
+#progress-container {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#progress-bar {
+  width: 0;
+  height: 100%;
+  background-color: #00bcd4; /* Cyan progress */
+  transition: width 0.4s ease;
 }

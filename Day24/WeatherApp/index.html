@@ -10,28 +10,32 @@
     <header>
       <h1>Weather Information</h1>
     </header>
-    <main>
-      <section class="weather-info">
+    <div class="center-container">
+      <div class="weather-info">
+        <h1>Default City Weather Info</h1>
         <p id="city">City:</p>
         <p id="temp">Temperature:</p>
         <p id="condition">Condition:</p>
-      </section>
-      <section class="search-city">
+      </div>
+      <div class="search-city">
         <form id="weather-form">
           <input
             type="text"
             name="city"
-            placeholder="Enter city"
+            placeholder="City"
             id="city-name"
             required
           />
-          <button type="submit">Get Weather</button>
+          <button type="submit">Submit</button>
         </form>
-      </section>
-      <section class="forecast" id="forecast">
-        <!-- Forecast items will be dynamically added here -->
-      </section>
-    </main>
+      </div>
+    </div>
+    <div class="forecast" id="forecast">
+      <!-- Forecast items will be added here -->
+    </div>
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+    </div>
     <script src="App.js"></script>
   </body>
 </html>
